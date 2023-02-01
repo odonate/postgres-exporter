@@ -10,7 +10,7 @@ go_module(
     name = "postgres-exporter-db",
     install = ["..."],
     module = "github.com/odonate/postgres-exporter/db",
-    version = "337aebced3f5f5b1d76e441bdaaea1efc3bbb6dc",
+    version = "d85819806e490fc74ead6dad7953a7a0476435aa",
     deps = [
         ":pgx.v4",
         ":scany",
