@@ -8,8 +8,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/sync/errgroup"
 
-	"infrastructure/postgres/exporter/collector"
-	"infrastructure/postgres/exporter/db"
+	"collector"
+	"db"
 )
 
 const namespace = "pg_stat"

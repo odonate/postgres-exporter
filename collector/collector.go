@@ -3,7 +3,7 @@ package collector
 import (
 	"github.com/prometheus/client_golang/prometheus"
 
-	"infrastructure/postgres/exporter/db"
+	"db"
 )
 
 const (

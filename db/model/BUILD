@@ -1,6 +1,6 @@
 go_library(
     name = "model",
     srcs = ["model.go"],
-    visibility = ["//infrastructure/postgres/exporter/..."],
+    visibility = ["//db/..."],
     deps = ["//third_party/go:pgtype"],
 )

@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 
-	"infrastructure/postgres/exporter/db/model"
+	"db/model"
 )
 
 const sqlSelectPgStatActivity = `

@@ -7,3 +7,10 @@
 ; when you change it all users will automatically get updated.
 ; [please]
 ; version = 16.18.0
+
+;; LANGUAGES
+[go]
+defaultstatic = true
+gotool = //third_party/go:gotool|go
+cgoenabled = true
+ldflags = -lm

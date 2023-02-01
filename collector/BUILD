@@ -5,9 +5,9 @@ go_library(
         "pg_stat_activity.go",
         "pg_stat_user_table.go",
     ],
-    visibility = ["//infrastructure/postgres/exporter/..."],
+    visibility = ["PUBLIC"],
     deps = [
-        "//infrastructure/postgres/exporter/db",
+        "//db",
         "//third_party/go:prometheus-client",
         "//third_party/go:x_sync",
     ],

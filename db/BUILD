@@ -8,9 +8,9 @@ go_library(
         "pg_stat_activity.go",
         "pg_stat_user_table.go",
     ],
-    visibility = ["//infrastructure/postgres/exporter/..."],
+    visibility = ["PUBLIC"],
     deps = [
-        "//infrastructure/postgres/exporter/db/model",
+        "//db/model",
         "//third_party/go:pgx.v4",
         "//third_party/go:scany",
     ],
