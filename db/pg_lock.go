@@ -2,8 +2,6 @@ package db
 
 import (
 	"context"
-
-	"db/model"
 )
 
 const sqlSelectPgLock = `
@@ -28,8 +26,8 @@ LEFT JOIN
 ON tmp.mode=tmp2.mode and pg_database.oid = tmp2.database ORDER BY 1`
 
 // SelectPgLocks selects stats on locks held.
-func (db *Client) SelectPgLocks(ctx context.Context) ([]*model.PgLock, error) {
-	pgLocks := []*model.PgLock{}
+func (db *Client) SelectPgLocks(ctx context.Context) ([]*PgLock, error) {
+	pgLocks := []*PgLock{}
 	if err := db.Select(ctx, &pgLocks, sqlSelectPgLock); err != nil {
 		return nil, err
 	}

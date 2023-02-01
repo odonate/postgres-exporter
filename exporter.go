@@ -9,7 +9,7 @@ import (
 	"golang.org/x/sync/errgroup"
 
 	"collector"
-	"db"
+	"github.com/odonate/postgres-exporter/db"
 )
 
 const namespace = "pg_stat"

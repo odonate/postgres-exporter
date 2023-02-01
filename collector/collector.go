@@ -26,3 +26,4 @@ func DefaultCollectors(db *db.Client) []Collector {
 		NewPgStatActivityCollector(db),
 	}
 }
+

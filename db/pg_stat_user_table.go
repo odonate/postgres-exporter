@@ -2,8 +2,6 @@ package db
 
 import (
 	"context"
-
-	"db/model"
 )
 
 const sqlSelectPgStatUserTables = `
@@ -35,8 +33,8 @@ SELECT
 `
 
 // SelectPgStatUserTables selects stats on user tables.
-func (db *Client) SelectPgStatUserTables(ctx context.Context) ([]*model.PgStatUserTable, error) {
-	pgStatUserTables := []*model.PgStatUserTable{}
+func (db *Client) SelectPgStatUserTables(ctx context.Context) ([]*PgStatUserTable, error) {
+	pgStatUserTables := []*PgStatUserTable{}
 	if err := db.Select(ctx, &pgStatUserTables, sqlSelectPgStatUserTables); err != nil {
 		return nil, err
 	}

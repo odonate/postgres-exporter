@@ -7,6 +7,17 @@ go_toolchain(
 )
 
 go_module(
+    name = "postgres-exporter-db",
+    install = ["..."],
+    module = "github.com/odonate/postgres-exporter/db",
+    version = "337aebced3f5f5b1d76e441bdaaea1efc3bbb6dc",
+    deps = [
+        ":pgx.v4",
+        ":scany",
+    ],
+)
+
+go_module(
     name = "prometheus-client",
     install = ["..."],
     module = "github.com/prometheus/client_golang",
