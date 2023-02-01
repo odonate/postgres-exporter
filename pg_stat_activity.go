@@ -1,12 +1,13 @@
-package collector
+package exporter
 
 import (
 	"context"
 	"fmt"
 	"sync"
 
-	"github.com/odonate/postgres-exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
+
+	"db"
 )
 
 // PgStatActivityCollector collects from pg_stat_user_tables.

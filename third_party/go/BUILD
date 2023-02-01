@@ -6,27 +6,27 @@ go_toolchain(
     version = "1.17.6",
 )
 
-go_module(
-    name = "postgres-exporter-db",
-    install = ["..."],
-    module = "github.com/odonate/postgres-exporter/db",
-    version = "b401e3f4abebcf06f4e6015d03cb5886b24e6a82",
-    deps = [
-        ":pgx.v4",
-        ":scany",
-    ],
-)
+# go_module(
+#     name = "postgres-exporter-db",
+#     install = ["..."],
+#     module = "github.com/odonate/postgres-exporter/db",
+#     version = "b401e3f4abebcf06f4e6015d03cb5886b24e6a82",
+#     deps = [
+#         ":pgx.v4",
+#         ":scany",
+#     ],
+# )
 
-go_module(
-    name = "postgres-exporter-collector",
-    install = ["..."],
-    module = "github.com/odonate/postgres-exporter/collector",
-    version = "b401e3f4abebcf06f4e6015d03cb5886b24e6a82",
-    deps = [
-        ":postgres-exporter-db",
-        ":prometheus-client",
-    ],
-)
+# go_module(
+#     name = "postgres-exporter-collector",
+#     install = ["..."],
+#     module = "github.com/odonate/postgres-exporter/collector",
+#     version = "b401e3f4abebcf06f4e6015d03cb5886b24e6a82",
+#     deps = [
+#         ":postgres-exporter-db",
+#         ":prometheus-client",
+#     ],
+# )
 
 go_module(
     name = "prometheus-client",
