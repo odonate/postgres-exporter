@@ -1,4 +1,4 @@
-module github.com/odonate/postgres-exporter/collector
+module github.com/odonate/postgres-exporter
 
 go 1.17
 
