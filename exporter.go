@@ -14,6 +14,11 @@ import (
 
 const namespace = "pg_stat"
 
+// Opts for the exporter.
+type Opts struct {
+	DB db.Opts
+}
+
 // Exporter collects PostgreSQL metrics and exports them via prometheus.
 type Exporter struct {
 	db         *db.Client
@@ -27,8 +32,8 @@ type Exporter struct {
 }
 
 // MustNew instantiates and returns a new Exporter or panics.
-func MustNew(ctx context.Context, dbOpts db.Opts) *Exporter {
-	exporter, err := New(ctx, dbOpts)
+func MustNew(ctx context.Context, opts Opts) *Exporter {
+	exporter, err := New(ctx, opts)
 	if err != nil {
 		panic(err)
 	}
@@ -36,8 +41,8 @@ func MustNew(ctx context.Context, dbOpts db.Opts) *Exporter {
 }
 
 // New instaniates and returns a new Exporter.
-func New(ctx context.Context, dbOpts db.Opts) (*Exporter, error) {
-	db, err := db.New(ctx, dbOpts)
+func New(ctx context.Context, opts Opts) (*Exporter, error) {
+	db, err := db.New(ctx, opts.DB)
 	if err != nil {
 		return nil, fmt.Errorf("creating exporter: %w", err)
 	}
