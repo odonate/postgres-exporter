@@ -10,7 +10,7 @@ go_module(
     name = "postgres-exporter-db",
     install = ["..."],
     module = "github.com/odonate/postgres-exporter/db",
-    version = "d85819806e490fc74ead6dad7953a7a0476435aa",
+    version = "b401e3f4abebcf06f4e6015d03cb5886b24e6a82",
     deps = [
         ":pgx.v4",
         ":scany",
@@ -21,10 +21,10 @@ go_module(
     name = "postgres-exporter-collector",
     install = ["..."],
     module = "github.com/odonate/postgres-exporter/collector",
-    version = "d85819806e490fc74ead6dad7953a7a0476435aa",
+    version = "b401e3f4abebcf06f4e6015d03cb5886b24e6a82",
     deps = [
-        ":pgx.v4",
-        ":scany",
+        ":postgres-exporter-db",
+        ":prometheus-client",
     ],
 )
 
