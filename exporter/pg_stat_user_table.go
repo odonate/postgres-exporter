@@ -7,7 +7,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"db"
+	"exporter/db"
 )
 
 // PgStatUserTableCollector collects from pg_stat_user_tables.

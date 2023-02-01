@@ -8,7 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/sync/errgroup"
 
-	"db"
+	"exporter/db"
 )
 
 // Opts for the exporter.
