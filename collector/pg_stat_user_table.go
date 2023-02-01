@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/odonate/postgres-exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
-
-	"db"
 )
 
 // PgStatUserTableCollector collects from pg_stat_user_tables.

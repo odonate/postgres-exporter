@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/odonate/postgres-exporter/collector"
+	"github.com/odonate/postgres-exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/sync/errgroup"
-
-	"collector"
-	"github.com/odonate/postgres-exporter/db"
 )
 
 const namespace = "pg_stat"

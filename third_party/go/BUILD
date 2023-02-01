@@ -18,6 +18,17 @@ go_module(
 )
 
 go_module(
+    name = "postgres-exporter-collector",
+    install = ["..."],
+    module = "github.com/odonate/postgres-exporter/collector",
+    version = "d85819806e490fc74ead6dad7953a7a0476435aa",
+    deps = [
+        ":pgx.v4",
+        ":scany",
+    ],
+)
+
+go_module(
     name = "prometheus-client",
     install = ["..."],
     module = "github.com/prometheus/client_golang",

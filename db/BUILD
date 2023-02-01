@@ -10,7 +10,6 @@ go_library(
     ],
     visibility = ["PUBLIC"],
     deps = [
-        "//db/model",
         "//third_party/go:pgx.v4",
         "//third_party/go:scany",
     ],

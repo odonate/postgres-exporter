@@ -1,9 +1,8 @@
 package collector
 
 import (
+	"github.com/odonate/postgres-exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
-
-	"db"
 )
 
 const (
