@@ -1,9 +1,8 @@
 package collectors
 
 import (
-	"github.com/prometheus/client_golang/prometheus"
-
 	"github.com/odonate/postgres-exporter/exporter/db"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 const (
@@ -26,4 +25,3 @@ func DefaultCollectors(db *db.Client) []Collector {
 		NewPgStatActivityCollector(db),
 	}
 }
-

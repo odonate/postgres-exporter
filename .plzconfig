@@ -11,6 +11,7 @@
 ;; LANGUAGES
 [go]
 defaultstatic = true
+importpath = github.com/odonate/postgres-exporter
 gotool = //third_party/go:gotool|go
 cgoenabled = true
 ldflags = -lm

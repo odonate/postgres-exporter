@@ -6,27 +6,119 @@ go_toolchain(
     version = "1.17.6",
 )
 
-# go_module(
-#     name = "postgres-exporter-db",
-#     install = ["..."],
-#     module = "github.com/odonate/postgres-exporter/exporter/db",
-#     version = "main",
-#     deps = [
-#         ":pgx.v4",
-#         ":scany",
-#     ],
-# )
+go_module(
+    name = "golint",
+    binary = True,
+    download = ":x-lint-download",
+    install = ["golint"],
+    module = "golang.org/x/lint",
+    deps = [":x_tools"],
+)
 
-# go_module(
-#     name = "postgres-exporter-collector",
-#     install = ["..."],
-#     module = "github.com/odonate/postgres-exporter/collector",
-#     version = "b401e3f4abebcf06f4e6015d03cb5886b24e6a82",
-#     deps = [
-#         ":postgres-exporter-db",
-#         ":prometheus-client",
-#     ],
-# )
+go_mod_download(
+    name = "x-lint-download",
+    module = "golang.org/x/lint",
+    version = "v0.0.0-20210508222113-6edffad5e616",
+    deps = [":x_tools"],
+)
+
+go_module(
+    name = "x_tools",
+    install = ["..."],
+    module = "golang.org/x/tools",
+    version = "v0.1.4",
+    deps = [
+        ":goldmark",
+        ":x_crypto",
+        ":x_errors",
+        ":x_mod",
+        ":x_net",
+        ":x_sync",
+    ],
+)
+
+go_module(
+    name = "x_term",
+    module = "golang.org/x/term",
+    version = "v0.0.0-20210615171337-6886f2dfbf5b",
+    deps = [":x_sys"],
+)
+
+go_module(
+    name = "x_crypto",
+    install = ["..."],
+    module = "golang.org/x/crypto",
+    strip = [
+        "acme/autocert",
+    ],
+    version = "v0.0.0-20210616213533-5ff15b29337e",
+    deps = [
+        ":x_sys",
+        ":x_term",
+    ],
+)
+
+go_module(
+    name = "x_sys",
+    install = ["..."],
+    module = "golang.org/x/sys",
+    version = "v0.0.0-20210415045647-66c3f260301c",
+)
+
+go_module(
+    name = "x_sync",
+    install = ["..."],
+    module = "golang.org/x/sync",
+    version = "v0.0.0-20210220032951-036812b2e83c",
+)
+
+go_module(
+    name = "x_net",
+    install = ["..."],
+    module = "golang.org/x/net",
+    strip = ["http2/h2demo"],
+    version = "v0.0.0-20210614182718-04defd469f4e",
+    deps = [
+        ":x_crypto",
+        ":x_text",
+    ],
+)
+
+go_module(
+    name = "x_text",
+    install = ["..."],
+    module = "golang.org/x/text",
+    strip = [
+        "cmd",
+        "message/pipeline",
+    ],
+    version = "v0.3.6",
+)
+
+go_module(
+    name = "x_mod",
+    install = ["..."],
+    module = "golang.org/x/mod",
+    version = "v0.5.1",
+    deps = [
+        ":x_crypto",
+        ":x_errors",
+    ],
+)
+
+go_module(
+    name = "x_errors",
+    install = ["..."],
+    module = "golang.org/x/xerrors",
+    version = "v0.0.0-20200804184101-5ec99f83aff1",
+)
+
+go_module(
+    name = "goldmark",
+    install = ["..."],
+    module = "github.com/yuin/goldmark",
+    version = "v1.3.9",
+)
 
 go_module(
     name = "prometheus-client",
@@ -420,64 +512,6 @@ go_module(
     name = "gofrs-uuid",
     module = "github.com/gofrs/uuid",
     version = "v4.0.0",
-)
-
-go_module(
-    name = "x_term",
-    module = "golang.org/x/term",
-    version = "v0.0.0-20210615171337-6886f2dfbf5b",
-    deps = [":x_sys"],
-)
-
-go_module(
-    name = "x_crypto",
-    install = ["..."],
-    module = "golang.org/x/crypto",
-    strip = [
-        "acme/autocert",
-    ],
-    version = "v0.0.0-20210616213533-5ff15b29337e",
-    deps = [
-        ":x_sys",
-        ":x_term",
-    ],
-)
-
-go_module(
-    name = "x_sys",
-    install = ["..."],
-    module = "golang.org/x/sys",
-    version = "v0.0.0-20210415045647-66c3f260301c",
-)
-
-go_module(
-    name = "x_sync",
-    install = ["..."],
-    module = "golang.org/x/sync",
-    version = "v0.0.0-20210220032951-036812b2e83c",
-)
-
-go_module(
-    name = "x_net",
-    install = ["..."],
-    module = "golang.org/x/net",
-    strip = ["http2/h2demo"],
-    version = "v0.0.0-20210614182718-04defd469f4e",
-    deps = [
-        ":x_crypto",
-        ":x_text",
-    ],
-)
-
-go_module(
-    name = "x_text",
-    install = ["..."],
-    module = "golang.org/x/text",
-    strip = [
-        "cmd",
-        "message/pipeline",
-    ],
-    version = "v0.3.6",
 )
 
 go_module(

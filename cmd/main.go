@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	
+
 	"github.com/odonate/postgres-exporter/exporter"
 )
 
