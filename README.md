@@ -1,6 +1,6 @@
 # PostgreSQL Exporter
 
-Prometheus exporter Golang library for PostgreSQL server-side metrics. An alternative to [pometheus-community/postgres_exporter](https://github.com/prometheus-community/postgres_exporter), which still uses [lib/pq](https://github.com/lib/pq).
+Prometheus exporter for PostgreSQL server-side metrics. An alternative to [prometheus-community/postgres_exporter](https://github.com/prometheus-community/postgres_exporter), which still uses [lib/pq](https://github.com/lib/pq).
 
 As `lib/pq` is in maintenance mode, this library leverages [pgx](https://github.com/jackc/pgx), which aims to be low-level, fast, and performant, while also enabling PostgreSQL-specific features that the standard `database/sql` package does not allow for (and is actively maintained).
 
