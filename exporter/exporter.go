@@ -8,8 +8,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/sync/errgroup"
 
-	"exporter/db"
+	"github.com/odonate/postgres-exporter/exporter/db"
+	"github.com/odonate/postgres-exporter/exporter/collectors"
 )
+
+const namespace = "pg_stat"
 
 // Opts for the exporter.
 type Opts struct {
@@ -19,7 +22,7 @@ type Opts struct {
 // Exporter collects PostgreSQL metrics and exports them via prometheus.
 type Exporter struct {
 	db         *db.Client
-	collectors []Collector
+	collectors []collectors.Collector
 
 	// Internal metrics.
 	up           prometheus.Gauge
@@ -45,7 +48,7 @@ func New(ctx context.Context, opts Opts) (*Exporter, error) {
 	}
 	return &Exporter{
 		db:         db,
-		collectors: DefaultCollectors(db),
+		collectors: collectors.DefaultCollectors(db),
 
 		// Internal metrics.
 		up: prometheus.NewGauge(prometheus.GaugeOpts{
@@ -62,7 +65,7 @@ func New(ctx context.Context, opts Opts) (*Exporter, error) {
 }
 
 // WithCustomCollectors lets the exporter scrape custom metrics.
-func (e *Exporter) WithCustomCollectors(collectors ...Collector) *Exporter {
+func (e *Exporter) WithCustomCollectors(collectors ...collectors.Collector) *Exporter {
 	e.collectors = append(e.collectors, collectors...)
 	return e
 }

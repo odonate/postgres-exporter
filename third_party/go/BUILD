@@ -9,8 +9,8 @@ go_toolchain(
 # go_module(
 #     name = "postgres-exporter-db",
 #     install = ["..."],
-#     module = "github.com/odonate/postgres-exporter/db",
-#     version = "b401e3f4abebcf06f4e6015d03cb5886b24e6a82",
+#     module = "github.com/odonate/postgres-exporter/exporter/db",
+#     version = "main",
 #     deps = [
 #         ":pgx.v4",
 #         ":scany",

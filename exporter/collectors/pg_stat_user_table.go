@@ -1,4 +1,4 @@
-package exporter
+package collectors
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"exporter/db"
+	"github.com/odonate/postgres-exporter/exporter/db"
 )
 
 // PgStatUserTableCollector collects from pg_stat_user_tables.

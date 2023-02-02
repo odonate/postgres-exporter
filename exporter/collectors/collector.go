@@ -1,9 +1,9 @@
-package exporter
+package collectors
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
 
-	"exporter/db"
+	"github.com/odonate/postgres-exporter/exporter/db"
 )
 
 const (
