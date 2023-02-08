@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/odonate/postgres-exporter/exporter/db/model"
 )
 
 const sqlSelectPgStatActivity = `
@@ -30,8 +32,8 @@ FROM pg_stat_activity GROUP BY datname,state) AS tmp2
 ON tmp.state = tmp2.state AND pg_database.datname = tmp2.datname`
 
 // SelectPgStatActivity selects stats on user tables.
-func (db *Client) SelectPgStatActivity(ctx context.Context) ([]*PgStatActivity, error) {
-	pgStatActivities := []*PgStatActivity{}
+func (db *Client) SelectPgStatActivity(ctx context.Context) ([]*model.PgStatActivity, error) {
+	pgStatActivities := []*model.PgStatActivity{}
 	if err := db.Select(ctx, &pgStatActivities, sqlSelectPgStatActivity); err != nil {
 		return nil, err
 	}

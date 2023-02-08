@@ -25,6 +25,14 @@ type PgStatUserTableCollector struct {
 	nLiveTup         *prometheus.Desc
 	nDeadTup         *prometheus.Desc
 	nModSinceAnalyze *prometheus.Desc
+	lastVacuum       *prometheus.Desc
+	lastAutoVacuum   *prometheus.Desc
+	lastAnalyze      *prometheus.Desc
+	lastAutoAnalyze  *prometheus.Desc
+	vacuumCount      *prometheus.Desc
+	autoVacuumCount  *prometheus.Desc
+	analyzeCount     *prometheus.Desc
+	autoAnalyzeCount *prometheus.Desc
 }
 
 // NewPgStatUserTableCollector instantiates and returns a new PgStatUserTableCollector.
@@ -98,6 +106,54 @@ func NewPgStatUserTableCollector(db *db.Client) *PgStatUserTableCollector {
 			variableLabels,
 			nil,
 		),
+		lastVacuum: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, userTablesSubSystem, "last_vacuum"),
+			"Last time at which this table was manually vacuumed (not counting VACUUM FULL)",
+			variableLabels,
+			nil,
+		),
+		lastAutoVacuum: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, userTablesSubSystem, "last_autovacuum"),
+			"Last time at which this table was vacuumed by the autovacuum daemon",
+			variableLabels,
+			nil,
+		),
+		lastAnalyze: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, userTablesSubSystem, "last_analyze"),
+			"Last time at which this table was manually analyzed",
+			variableLabels,
+			nil,
+		),
+		lastAutoAnalyze: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, userTablesSubSystem, "last_autoanalyze"),
+			"Last time at which this table was analyzed by the autovacuum daemon",
+			variableLabels,
+			nil,
+		),
+		vacuumCount: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, userTablesSubSystem, "vacuum_count"),
+			"Number of times this table has been manually vacuumed (not counting VACUUM FULL)",
+			variableLabels,
+			nil,
+		),
+		autoVacuumCount: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, userTablesSubSystem, "autovacuum_count"),
+			"Number of times this table has been vacuumed by the autovacuum daemon",
+			variableLabels,
+			nil,
+		),
+		analyzeCount: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, userTablesSubSystem, "analyze_count"),
+			"Number of times this table has been manually analyzed",
+			variableLabels,
+			nil,
+		),
+		autoAnalyzeCount: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, userTablesSubSystem, "autoanalyze_count"),
+			"Number of times this table has been analyzed by the autovacuum daemon",
+			variableLabels,
+			nil,
+		),
 	}
 }
 
@@ -114,6 +170,14 @@ func (c *PgStatUserTableCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.nLiveTup
 	ch <- c.nDeadTup
 	ch <- c.nModSinceAnalyze
+	ch <- c.lastVacuum
+	ch <- c.lastAutoVacuum
+	ch <- c.lastAnalyze
+	ch <- c.lastAutoAnalyze
+	ch <- c.vacuumCount
+	ch <- c.autoVacuumCount
+	ch <- c.analyzeCount
+	ch <- c.autoAnalyzeCount
 }
 
 // Collect implements the promtheus.Collector.
@@ -145,7 +209,14 @@ func (c *PgStatUserTableCollector) Scrape(ch chan<- prometheus.Metric) error {
 		ch <- prometheus.MustNewConstMetric(c.nLiveTup, prometheus.GaugeValue, float64(stat.NLiveTup), stat.DatName, stat.SchemaName, stat.RelName)
 		ch <- prometheus.MustNewConstMetric(c.nDeadTup, prometheus.GaugeValue, float64(stat.NDeadTup), stat.DatName, stat.SchemaName, stat.RelName)
 		ch <- prometheus.MustNewConstMetric(c.nModSinceAnalyze, prometheus.GaugeValue, float64(stat.NModSinceAnalyze), stat.DatName, stat.SchemaName, stat.RelName)
-		// TODO autovacuum. https://github.com/prometheus-community/postgres_exporter/blob/master/queries.yaml
+		ch <- prometheus.MustNewConstMetric(c.lastVacuum, prometheus.GaugeValue, float64(stat.LastVacuum.Time.UnixMicro()), stat.DatName, stat.SchemaName, stat.RelName)
+		ch <- prometheus.MustNewConstMetric(c.lastAutoVacuum, prometheus.GaugeValue, float64(stat.LastAutoVacuum.Time.UnixMicro()), stat.DatName, stat.SchemaName, stat.RelName)
+		ch <- prometheus.MustNewConstMetric(c.lastAnalyze, prometheus.GaugeValue, float64(stat.LastAnalyze.Time.UnixMicro()), stat.DatName, stat.SchemaName, stat.RelName)
+		ch <- prometheus.MustNewConstMetric(c.lastAutoAnalyze, prometheus.GaugeValue, float64(stat.LastAutoAnalyze.Time.UnixMicro()), stat.DatName, stat.SchemaName, stat.RelName)
+		ch <- prometheus.MustNewConstMetric(c.vacuumCount, prometheus.CounterValue, float64(stat.VacuumCount), stat.DatName, stat.SchemaName, stat.RelName)
+		ch <- prometheus.MustNewConstMetric(c.autoVacuumCount, prometheus.CounterValue, float64(stat.AutoVacuumCount), stat.DatName, stat.SchemaName, stat.RelName)
+		ch <- prometheus.MustNewConstMetric(c.analyzeCount, prometheus.CounterValue, float64(stat.AnalyzeCount), stat.DatName, stat.SchemaName, stat.RelName)
+		ch <- prometheus.MustNewConstMetric(c.autoAnalyzeCount, prometheus.CounterValue, float64(stat.AutoAnalyzeCount), stat.DatName, stat.SchemaName, stat.RelName)
 	}
 	return nil
 }

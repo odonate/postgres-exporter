@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/odonate/postgres-exporter/exporter/db/model"
 )
 
 const sqlSelectPgStatUserTables = `
@@ -28,13 +30,11 @@ SELECT
      autovacuum_count,
      analyze_count,
      autoanalyze_count
-   FROM
-     pg_stat_user_tables
-`
+FROM pg_stat_user_tables`
 
 // SelectPgStatUserTables selects stats on user tables.
-func (db *Client) SelectPgStatUserTables(ctx context.Context) ([]*PgStatUserTable, error) {
-	pgStatUserTables := []*PgStatUserTable{}
+func (db *Client) SelectPgStatUserTables(ctx context.Context) ([]*model.PgStatUserTable, error) {
+	pgStatUserTables := []*model.PgStatUserTable{}
 	if err := db.Select(ctx, &pgStatUserTables, sqlSelectPgStatUserTables); err != nil {
 		return nil, err
 	}
