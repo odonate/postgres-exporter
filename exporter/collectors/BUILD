@@ -2,6 +2,7 @@ go_library(
     name = "collectors",
     srcs = [
         "collector.go",
+        "pg_locks.go",
         "pg_stat_activity.go",
         "pg_stat_statements.go",
         "pg_stat_user_table.go",
