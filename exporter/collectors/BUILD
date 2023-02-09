@@ -3,6 +3,7 @@ go_library(
     srcs = [
         "collector.go",
         "pg_stat_activity.go",
+        "pg_stat_statements.go",
         "pg_stat_user_table.go",
     ],
     visibility = ["PUBLIC"],

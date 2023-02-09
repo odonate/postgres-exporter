@@ -9,6 +9,7 @@ const (
 	namespace           = "pg_stat"
 	userTablesSubSystem = "user_tables"
 	activitySubSystem   = "activity"
+	statementsSubSystem = "statements"
 )
 
 // Collector wraps the prometheus.Collector.
@@ -21,7 +22,8 @@ type Collector interface {
 // DefaultCollectors specifies the list of default collectors.
 func DefaultCollectors(db *db.Client) []Collector {
 	return []Collector{
-		NewPgStatUserTableCollector(db),
 		NewPgStatActivityCollector(db),
+		NewPgStatStatementsCollector(db),
+		NewPgStatUserTableCollector(db),
 	}
 }
