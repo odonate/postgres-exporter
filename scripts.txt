@@ -1,7 +1,0 @@
-
-### Linting
-
-gofmt -w ~/postgres-exporter/exporter
-
-### Vendorising
-
