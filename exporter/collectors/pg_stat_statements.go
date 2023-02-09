@@ -9,7 +9,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// PgStatStatementsCollector collects from pg_stat_user_tables.
+// PgStatStatementsCollector collects from pg_stat_statements.
 type PgStatStatementsCollector struct {
 	db    *db.Client
 	mutex sync.RWMutex
@@ -35,7 +35,7 @@ type PgStatStatementsCollector struct {
 	blkWriteTimeSeconds *prometheus.Desc
 }
 
-// NewPgStatStatementsCollector instantiates and returns a new PgStatUserTableCollector.
+// NewPgStatStatementsCollector instantiates and returns a new PgStatStatementsCollector.
 func NewPgStatStatementsCollector(db *db.Client) *PgStatStatementsCollector {
 	variableLabels := []string{"rolname", "datname", "queryid"}
 	return &PgStatStatementsCollector{

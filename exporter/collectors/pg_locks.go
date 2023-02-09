@@ -9,7 +9,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// PgLocksCollector collects from pg_stat_user_tables.
+// PgLocksCollector collects from pg_locks.
 type PgLocksCollector struct {
 	db    *db.Client
 	mutex sync.RWMutex
