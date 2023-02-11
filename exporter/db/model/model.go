@@ -50,7 +50,7 @@ type PgStatStatement struct {
 	RolName             string  `db:"rolname"`
 	DatName             string  `db:"datname"`
 	QueryID             int     `db:"queryid"`
-	QueryText           string  `db:"querytext"`
+	Query               string  `db:"query"`
 	Calls               int     `db:"calls"`
 	TotalTimeSeconds    float64 `db:"total_time_seconds"`
 	MinTimeSeconds      float64 `db:"min_time_seconds"`
