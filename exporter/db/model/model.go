@@ -55,7 +55,7 @@ type PgStatStatement struct {
 	MinTimeSeconds      int    `db:"min_time_seconds"`
 	MaxTimeSeconds      int    `db:"max_time_seconds"`
 	MeanTimeSeconds     int    `db:"mean_time_seconds"`
-	StdDevTimeSeconds   int    `db:"std_dev_time_seconds"`
+	StdDevTimeSeconds   int    `db:"stddev_time_seconds"`
 	Rows                int    `db:"rows"`
 	SharedBlksHit       int    `db:"shared_blks_hit"`
 	SharedBlksRead      int    `db:"shared_blks_read"`
