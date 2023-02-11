@@ -49,7 +49,7 @@ type PgStatUserTable struct {
 type PgStatStatement struct {
 	RolName             string `db:"rolname"`
 	DatName             string `db:"datname"`
-	QueryID             string `db:"queryid"`
+	QueryID             int    `db:"queryid"`
 	Calls               int    `db:"calls"`
 	TotalTimeSeconds    int    `db:"total_time_seconds"`
 	MinTimeSeconds      int    `db:"min_time_seconds"`
