@@ -11,6 +11,7 @@ SELECT
     t2.rolname, 
     t3.datname, 
     queryid, 
+    query,
     calls, 
     total_time / 1000 as total_time_seconds, 
     min_time / 1000 as min_time_seconds, 
