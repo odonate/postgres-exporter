@@ -16,8 +16,8 @@ SELECT
 FROM pg_statio_user_indexes`
 
 // SelectPgStatioUserIndexes selects stats on user indexes.
-func (db *Client) SelectPgStatioUserIndexes(ctx context.Context) ([]*model.PgStatioUserIndexes, error) {
-	pgStatioUserIndexes := []*model.PgStatioUserIndexes{}
+func (db *Client) SelectPgStatioUserIndexes(ctx context.Context) ([]*model.PgStatioUserIndex, error) {
+	pgStatioUserIndexes := []*model.PgStatioUserIndex{}
 	if err := db.Select(ctx, &pgStatioUserIndexes, sqlSelectPgStatioUserIndexes); err != nil {
 		return nil, err
 	}

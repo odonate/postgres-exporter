@@ -21,8 +21,8 @@ SELECT
 FROM pg_statio_user_tables`
 
 // SelectPgStatioUserTables selects stats on user tables.
-func (db *Client) SelectPgStatioUserTables(ctx context.Context) ([]*model.PgStatioUserTables, error) {
-	pgStatioUserTables := []*model.PgStatioUserTables{}
+func (db *Client) SelectPgStatioUserTables(ctx context.Context) ([]*model.PgStatioUserTable, error) {
+	pgStatioUserTables := []*model.PgStatioUserTable{}
 	if err := db.Select(ctx, &pgStatioUserTables, sqlSelectPgStatioUserTables); err != nil {
 		return nil, err
 	}
