@@ -10,8 +10,8 @@ const sqlSelectPgStatStatements = `
 SELECT 
     t2.rolname, 
     t3.datname, 
-    queryid, 
-    query,
+    queryid,
+    concat(left(query, 200), '__@',queryid::text, '__', length(query)) as query,
     calls, 
     total_time / 1000 as total_time_seconds, 
     min_time / 1000 as min_time_seconds, 
