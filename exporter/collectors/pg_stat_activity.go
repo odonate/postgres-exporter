@@ -7,22 +7,23 @@ import (
 
 	"github.com/odonate/postgres-exporter/exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/sync/errgroup"
 )
 
 // PgStatActivityCollector collects from pg_stat_user_tables.
 type PgStatActivityCollector struct {
-	db    *db.Client
-	mutex sync.RWMutex
+	dbClients []*db.Client
+	mutex     sync.RWMutex
 
 	activityCount *prometheus.Desc
 	maxTxDuration *prometheus.Desc
 }
 
 // NewPgStatActivityCollector instantiates and returns a new PgStatActivityCollector.
-func NewPgStatActivityCollector(db *db.Client) *PgStatActivityCollector {
+func NewPgStatActivityCollector(dbClients []*db.Client) *PgStatActivityCollector {
 	variableLabels := []string{"datname", "state"}
 	return &PgStatActivityCollector{
-		db: db,
+		dbClients: dbClients,
 
 		activityCount: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, activitySubSystem, "count"),
@@ -54,14 +55,24 @@ func (c *PgStatActivityCollector) Collect(ch chan<- prometheus.Metric) {
 
 // Scrape implements our Scraper interfacc.
 func (c *PgStatActivityCollector) Scrape(ch chan<- prometheus.Metric) error {
-	c.mutex.Lock()
-	defer c.mutex.Unlock()
+	group := errgroup.Group{}
+	for _, dbClient := range c.dbClients {
+		dbClient := dbClient
+		group.Go(func() error { return c.scrape(dbClient, ch) })
+	}
+	if err := group.Wait(); err != nil {
+		return fmt.Errorf("scraping: %w", err)
+	}
+	return nil
+}
 
-	activityStats, err := c.db.SelectPgStatActivity(context.Background())
+func (c *PgStatActivityCollector) scrape(dbClient *db.Client, ch chan<- prometheus.Metric) error {
+	activityStats, err := dbClient.SelectPgStatActivity(context.Background())
 	if err != nil {
 		return fmt.Errorf("activity stats: %w", err)
 	}
-
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
 	for _, stat := range activityStats {
 		ch <- prometheus.MustNewConstMetric(c.activityCount, prometheus.GaugeValue, float64(stat.Count), stat.DatName, stat.State)
 		ch <- prometheus.MustNewConstMetric(c.maxTxDuration, prometheus.GaugeValue, stat.MaxTxDuration, stat.DatName, stat.State)

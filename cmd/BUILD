@@ -4,5 +4,6 @@ go_binary(
     visibility = ["PUBLIC"],
     deps = [
         "//exporter:exporter",
+        "//exporter/db",
      ],
 )

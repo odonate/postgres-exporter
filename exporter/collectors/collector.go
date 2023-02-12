@@ -6,7 +6,9 @@ import (
 )
 
 const (
-	namespace           = "pg_stat"
+	namespace   = "pg_stat"
+	namespaceIO = "pg_statio"
+
 	activitySubSystem   = "activity"
 	locksSubSystem      = "locks"
 	statementsSubSystem = "statements"
@@ -21,11 +23,11 @@ type Collector interface {
 }
 
 // DefaultCollectors specifies the list of default collectors.
-func DefaultCollectors(db *db.Client) []Collector {
+func DefaultCollectors(dbClients []*db.Client) []Collector {
 	return []Collector{
-		NewPgStatActivityCollector(db),
-		NewPgLocksCollector(db),
-		NewPgStatStatementsCollector(db),
-		NewPgStatUserTableCollector(db),
+		NewPgStatActivityCollector(dbClients),
+		NewPgLocksCollector(dbClients),
+		NewPgStatStatementsCollector(dbClients),
+		NewPgStatUserTableCollector(dbClients),
 	}
 }

@@ -15,12 +15,12 @@ const namespace = "pg_stat"
 
 // Opts for the exporter.
 type Opts struct {
-	DB db.Opts
+	DBOpts []db.Opts
 }
 
 // Exporter collects PostgreSQL metrics and exports them via prometheus.
 type Exporter struct {
-	db         *db.Client
+	dbClients  []*db.Client
 	collectors []collectors.Collector
 
 	// Internal metrics.
@@ -41,13 +41,20 @@ func MustNew(ctx context.Context, opts Opts) *Exporter {
 
 // New instaniates and returns a new Exporter.
 func New(ctx context.Context, opts Opts) (*Exporter, error) {
-	db, err := db.New(ctx, opts.DB)
-	if err != nil {
-		return nil, fmt.Errorf("creating exporter: %w", err)
+	if len(opts.DBOpts) < 1 {
+		return nil, fmt.Errorf("missing db opts")
+	}
+	dbClients := make([]*db.Client, 0, len(opts.DBOpts))
+	for _, dbOpt := range opts.DBOpts {
+		dbClient, err := db.New(ctx, dbOpt)
+		if err != nil {
+			return nil, fmt.Errorf("creating exporter: %w", err)
+		}
+		dbClients = append(dbClients, dbClient)
 	}
 	return &Exporter{
-		db:         db,
-		collectors: collectors.DefaultCollectors(db),
+		dbClients:  dbClients,
+		collectors: collectors.DefaultCollectors(dbClients),
 
 		// Internal metrics.
 		up: prometheus.NewGauge(prometheus.GaugeOpts{
@@ -74,7 +81,13 @@ func (e *Exporter) Register() { prometheus.MustRegister(e) }
 
 // HealthCheck pings PostgreSQL.
 func (e *Exporter) HealthCheck(ctx context.Context) error {
-	return e.db.CheckConnection(ctx)
+	group := errgroup.Group{}
+	for _, dbClient := range e.dbClients {
+		ctx := ctx
+		dbClient := dbClient
+		group.Go(func() error { return dbClient.CheckConnection(ctx) })
+	}
+	return group.Wait()
 }
 
 // Describe implements the prometheus.Collector.

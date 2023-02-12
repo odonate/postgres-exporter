@@ -47,36 +47,35 @@ type PgStatUserTable struct {
 
 // PgStatioUserTable contains I/O information on user tables.
 type PgStatioUserTable struct {
-	SchemaName       string             `db:"schemaname"`
-	RelName          string             `db:"relname"`
-	HeapBlksRead     int                `db:"heap_blks_read"`
-	HeapBlksHit      int                `db:"heap_blks_hit"`
-	IndexBlksRead    int                `db:"idx_blks_read"`
-	IndexBlksHit     int                `db:"idx_blks_hit"`
-	ToastBlksRead    int                `db:"toast_blks_read"`
-	ToastBlksHit     int                `db:"toast_blks_hit"`
-	TidxBlksRead     int                `db:"tidx_blks_read"`
-	TidxBlksHit      int                `db:"tidx_blks_hit"`
+	SchemaName    string `db:"schemaname"`
+	RelName       string `db:"relname"`
+	HeapBlksRead  int    `db:"heap_blks_read"`
+	HeapBlksHit   int    `db:"heap_blks_hit"`
+	IndexBlksRead int    `db:"idx_blks_read"`
+	IndexBlksHit  int    `db:"idx_blks_hit"`
+	ToastBlksRead int    `db:"toast_blks_read"`
+	ToastBlksHit  int    `db:"toast_blks_hit"`
+	TidxBlksRead  int    `db:"tidx_blks_read"`
+	TidxBlksHit   int    `db:"tidx_blks_hit"`
 }
 
 // PgStatUserIndexes contains information on user indexes.
 type PgStatUserIndex struct {
-	SchemaName       string             `db:"schemaname"`
-	RelName          string             `db:"relname"`
-	IndexRelName     string             `db:"indexrelname"`
-	IndexScan        int                `db:"idx_scan"`
-	IndexTupRead     int                `db:"idx_tup_read"`
-	IndexTupFetch    int                `db:"idx_tup_fetch"`
+	SchemaName    string `db:"schemaname"`
+	RelName       string `db:"relname"`
+	IndexRelName  string `db:"indexrelname"`
+	IndexScan     int    `db:"idx_scan"`
+	IndexTupRead  int    `db:"idx_tup_read"`
+	IndexTupFetch int    `db:"idx_tup_fetch"`
 }
-
 
 // PgStatioUserIndex contains I/O information on user indexes.
 type PgStatioUserIndex struct {
-	SchemaName       string             `db:"schemaname"`
-	RelName          string             `db:"relname"`
-	IndexRelName     string             `db:"indexrelname"`
-	IndexBlksRead    int                `db:"idx_blks_read"`
-	IndexBlksHit     int                `db:"idx_blks_hit"`
+	SchemaName    string `db:"schemaname"`
+	RelName       string `db:"relname"`
+	IndexRelName  string `db:"indexrelname"`
+	IndexBlksRead int    `db:"idx_blks_read"`
+	IndexBlksHit  int    `db:"idx_blks_hit"`
 }
 
 // PgStatStatement contains information on statements.
@@ -105,4 +104,3 @@ type PgStatStatement struct {
 	BlkReadTimeSeconds  int     `db:"blk_read_time_seconds"`
 	BlkWriteTimeSeconds int     `db:"blk_write_time_seconds"`
 }
-

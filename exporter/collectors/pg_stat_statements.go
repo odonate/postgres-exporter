@@ -8,12 +8,13 @@ import (
 
 	"github.com/odonate/postgres-exporter/exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/sync/errgroup"
 )
 
 // PgStatStatementsCollector collects from pg_stat_statements.
 type PgStatStatementsCollector struct {
-	db    *db.Client
-	mutex sync.RWMutex
+	dbClients []*db.Client
+	mutex     sync.RWMutex
 
 	calls               *prometheus.Desc
 	totalTimeSeconds    *prometheus.Desc
@@ -37,10 +38,10 @@ type PgStatStatementsCollector struct {
 }
 
 // NewPgStatStatementsCollector instantiates and returns a new PgStatStatementsCollector.
-func NewPgStatStatementsCollector(db *db.Client) *PgStatStatementsCollector {
+func NewPgStatStatementsCollector(dbClients []*db.Client) *PgStatStatementsCollector {
 	variableLabels := []string{"rolname", "datname", "queryid", "query"}
 	return &PgStatStatementsCollector{
-		db: db,
+		dbClients: dbClients,
 
 		calls: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, statementsSubSystem, "calls"),
@@ -191,14 +192,24 @@ func (c *PgStatStatementsCollector) Collect(ch chan<- prometheus.Metric) {
 
 // Scrape implements our Scraper interfacc.
 func (c *PgStatStatementsCollector) Scrape(ch chan<- prometheus.Metric) error {
-	c.mutex.Lock()
-	defer c.mutex.Unlock()
+	group := errgroup.Group{}
+	for _, dbClient := range c.dbClients {
+		dbClient := dbClient
+		group.Go(func() error { return c.scrape(dbClient, ch) })
+	}
+	if err := group.Wait(); err != nil {
+		return fmt.Errorf("scraping: %w", err)
+	}
+	return nil
+}
 
-	statementStats, err := c.db.SelectPgStatStatements(context.Background())
+func (c *PgStatStatementsCollector) scrape(dbClient *db.Client, ch chan<- prometheus.Metric) error {
+	statementStats, err := dbClient.SelectPgStatStatements(context.Background())
 	if err != nil {
 		return fmt.Errorf("statement stats: %w", err)
 	}
-
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
 	for _, stat := range statementStats {
 		ch <- prometheus.MustNewConstMetric(c.calls, prometheus.CounterValue, float64(stat.Calls), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
 		ch <- prometheus.MustNewConstMetric(c.totalTimeSeconds, prometheus.CounterValue, stat.TotalTimeSeconds, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)

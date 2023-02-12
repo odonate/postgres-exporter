@@ -7,21 +7,22 @@ import (
 
 	"github.com/odonate/postgres-exporter/exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/sync/errgroup"
 )
 
 // PgLocksCollector collects from pg_locks.
 type PgLocksCollector struct {
-	db    *db.Client
-	mutex sync.RWMutex
+	dbClients []*db.Client
+	mutex     sync.RWMutex
 
 	count *prometheus.Desc
 }
 
 // NewPgLocksCollector instantiates and returns a new PgLocksCollector.
-func NewPgLocksCollector(db *db.Client) *PgLocksCollector {
+func NewPgLocksCollector(dbClients []*db.Client) *PgLocksCollector {
 	variableLabels := []string{"datname", "mode"}
 	return &PgLocksCollector{
-		db: db,
+		dbClients: dbClients,
 
 		count: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, locksSubSystem, "count"),
@@ -44,16 +45,26 @@ func (c *PgLocksCollector) Collect(ch chan<- prometheus.Metric) {
 	_ = c.Scrape(ch)
 }
 
-// Scrape implements our Scraper interfacc.
+// Scrape implements our Scraper interface.
 func (c *PgLocksCollector) Scrape(ch chan<- prometheus.Metric) error {
-	c.mutex.Lock()
-	defer c.mutex.Unlock()
+	group := errgroup.Group{}
+	for _, dbClient := range c.dbClients {
+		dbClient := dbClient
+		group.Go(func() error { return c.scrape(dbClient, ch) })
+	}
+	if err := group.Wait(); err != nil {
+		return fmt.Errorf("scraping: %w", err)
+	}
+	return nil
+}
 
-	locks, err := c.db.SelectPgLocks(context.Background())
+func (c *PgLocksCollector) scrape(dbClient *db.Client, ch chan<- prometheus.Metric) error {
+	locks, err := dbClient.SelectPgLocks(context.Background())
 	if err != nil {
 		return fmt.Errorf("lock stats: %w", err)
 	}
-
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
 	for _, stat := range locks {
 		ch <- prometheus.MustNewConstMetric(c.count, prometheus.GaugeValue, float64(stat.Count), stat.DatName, stat.Mode)
 	}

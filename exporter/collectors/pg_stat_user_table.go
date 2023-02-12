@@ -7,12 +7,13 @@ import (
 
 	"github.com/odonate/postgres-exporter/exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/sync/errgroup"
 )
 
 // PgStatUserTableCollector collects from pg_stat_user_tables.
 type PgStatUserTableCollector struct {
-	db    *db.Client
-	mutex sync.RWMutex
+	dbClients []*db.Client
+	mutex     sync.RWMutex
 
 	seqScan          *prometheus.Desc
 	seqTupRead       *prometheus.Desc
@@ -36,10 +37,10 @@ type PgStatUserTableCollector struct {
 }
 
 // NewPgStatUserTableCollector instantiates and returns a new PgStatUserTableCollector.
-func NewPgStatUserTableCollector(db *db.Client) *PgStatUserTableCollector {
+func NewPgStatUserTableCollector(dbClients []*db.Client) *PgStatUserTableCollector {
 	variableLabels := []string{"datname", "schemaname", "relname"}
 	return &PgStatUserTableCollector{
-		db: db,
+		dbClients: dbClients,
 		seqScan: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, userTablesSubSystem, "sequential_scan"),
 			"Number of sequential scans initiated on this table",
@@ -189,14 +190,24 @@ func (c *PgStatUserTableCollector) Collect(ch chan<- prometheus.Metric) {
 
 // Scrape implements our Scraper interfacc.
 func (c *PgStatUserTableCollector) Scrape(ch chan<- prometheus.Metric) error {
-	c.mutex.Lock()
-	defer c.mutex.Unlock()
+	group := errgroup.Group{}
+	for _, dbClient := range c.dbClients {
+		dbClient := dbClient
+		group.Go(func() error { return c.scrape(dbClient, ch) })
+	}
+	if err := group.Wait(); err != nil {
+		return fmt.Errorf("scraping: %w", err)
+	}
+	return nil
+}
 
-	userTableStats, err := c.db.SelectPgStatUserTables(context.Background())
+func (c *PgStatUserTableCollector) scrape(dbClient *db.Client, ch chan<- prometheus.Metric) error {
+	userTableStats, err := dbClient.SelectPgStatUserTables(context.Background())
 	if err != nil {
 		return fmt.Errorf("user table stats: %w", err)
 	}
-
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
 	for _, stat := range userTableStats {
 		ch <- prometheus.MustNewConstMetric(c.seqScan, prometheus.CounterValue, float64(stat.SeqScan), stat.DatName, stat.SchemaName, stat.RelName)
 		ch <- prometheus.MustNewConstMetric(c.seqTupRead, prometheus.CounterValue, float64(stat.SeqTupRead), stat.DatName, stat.SchemaName, stat.RelName)
