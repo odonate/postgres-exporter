@@ -8,6 +8,7 @@ import (
 
 const sqlSelectPgStatioUserTables = `
 SELECT
+    current_database() as database,
     schemaname,
     relname,
     heap_blks_read,

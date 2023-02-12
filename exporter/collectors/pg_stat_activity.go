@@ -21,7 +21,7 @@ type PgStatActivityCollector struct {
 
 // NewPgStatActivityCollector instantiates and returns a new PgStatActivityCollector.
 func NewPgStatActivityCollector(dbClients []*db.Client) *PgStatActivityCollector {
-	variableLabels := []string{"datname", "state"}
+	variableLabels := []string{"database", "datname", "state"}
 	return &PgStatActivityCollector{
 		dbClients: dbClients,
 
@@ -74,8 +74,8 @@ func (c *PgStatActivityCollector) scrape(dbClient *db.Client, ch chan<- promethe
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	for _, stat := range activityStats {
-		ch <- prometheus.MustNewConstMetric(c.activityCount, prometheus.GaugeValue, float64(stat.Count), stat.DatName, stat.State)
-		ch <- prometheus.MustNewConstMetric(c.maxTxDuration, prometheus.GaugeValue, stat.MaxTxDuration, stat.DatName, stat.State)
+		ch <- prometheus.MustNewConstMetric(c.activityCount, prometheus.GaugeValue, float64(stat.Count), stat.Database, stat.DatName, stat.State)
+		ch <- prometheus.MustNewConstMetric(c.maxTxDuration, prometheus.GaugeValue, stat.MaxTxDuration, stat.Database, stat.DatName, stat.State)
 	}
 	return nil
 }

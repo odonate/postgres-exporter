@@ -8,7 +8,7 @@ import (
 
 const sqlSelectPgStatUserTables = `
 SELECT
-     current_database() datname,
+     current_database() as database,
      schemaname,
      relname,
      seq_scan,

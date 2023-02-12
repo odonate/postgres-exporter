@@ -20,7 +20,7 @@ type PgLocksCollector struct {
 
 // NewPgLocksCollector instantiates and returns a new PgLocksCollector.
 func NewPgLocksCollector(dbClients []*db.Client) *PgLocksCollector {
-	variableLabels := []string{"datname", "mode"}
+	variableLabels := []string{"database", "datname", "mode"}
 	return &PgLocksCollector{
 		dbClients: dbClients,
 
@@ -66,7 +66,7 @@ func (c *PgLocksCollector) scrape(dbClient *db.Client, ch chan<- prometheus.Metr
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	for _, stat := range locks {
-		ch <- prometheus.MustNewConstMetric(c.count, prometheus.GaugeValue, float64(stat.Count), stat.DatName, stat.Mode)
+		ch <- prometheus.MustNewConstMetric(c.count, prometheus.GaugeValue, float64(stat.Count), stat.Database, stat.DatName, stat.Mode)
 	}
 	return nil
 }

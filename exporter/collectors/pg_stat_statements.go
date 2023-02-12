@@ -39,7 +39,7 @@ type PgStatStatementsCollector struct {
 
 // NewPgStatStatementsCollector instantiates and returns a new PgStatStatementsCollector.
 func NewPgStatStatementsCollector(dbClients []*db.Client) *PgStatStatementsCollector {
-	variableLabels := []string{"rolname", "datname", "queryid", "query"}
+	variableLabels := []string{"database", "rolname", "datname", "queryid", "query"}
 	return &PgStatStatementsCollector{
 		dbClients: dbClients,
 
@@ -211,25 +211,25 @@ func (c *PgStatStatementsCollector) scrape(dbClient *db.Client, ch chan<- promet
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	for _, stat := range statementStats {
-		ch <- prometheus.MustNewConstMetric(c.calls, prometheus.CounterValue, float64(stat.Calls), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.totalTimeSeconds, prometheus.CounterValue, stat.TotalTimeSeconds, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.minTimeSeconds, prometheus.GaugeValue, stat.MinTimeSeconds, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.maxTimeSeconds, prometheus.GaugeValue, stat.MaxTimeSeconds, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.meanTimeSeconds, prometheus.GaugeValue, stat.MeanTimeSeconds, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.stdDevTimeSeconds, prometheus.GaugeValue, stat.StdDevTimeSeconds, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.rows, prometheus.CounterValue, float64(stat.Rows), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.sharedBlksHit, prometheus.CounterValue, float64(stat.SharedBlksHit), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.sharedBlksRead, prometheus.CounterValue, float64(stat.SharedBlksRead), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.sharedBlksDirtied, prometheus.CounterValue, float64(stat.SharedBlksDirtied), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.sharedBlksWritten, prometheus.CounterValue, float64(stat.SharedBlksWritten), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.localBlksHit, prometheus.CounterValue, float64(stat.LocalBlksHit), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.localBlksRead, prometheus.CounterValue, float64(stat.LocalBlksRead), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.localBlksDirtied, prometheus.CounterValue, float64(stat.LocalBlksDirtied), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.localBlksWritten, prometheus.CounterValue, float64(stat.LocalBlksWritten), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.tempBlksRead, prometheus.CounterValue, float64(stat.TempBlksRead), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.tempBlksWritten, prometheus.CounterValue, float64(stat.TempBlksWritten), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.blkReadTimeSeconds, prometheus.CounterValue, float64(stat.BlkReadTimeSeconds), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
-		ch <- prometheus.MustNewConstMetric(c.blkWriteTimeSeconds, prometheus.CounterValue, float64(stat.BlkWriteTimeSeconds), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.calls, prometheus.CounterValue, float64(stat.Calls), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.totalTimeSeconds, prometheus.CounterValue, stat.TotalTimeSeconds, stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.minTimeSeconds, prometheus.GaugeValue, stat.MinTimeSeconds, stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.maxTimeSeconds, prometheus.GaugeValue, stat.MaxTimeSeconds, stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.meanTimeSeconds, prometheus.GaugeValue, stat.MeanTimeSeconds, stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.stdDevTimeSeconds, prometheus.GaugeValue, stat.StdDevTimeSeconds, stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.rows, prometheus.CounterValue, float64(stat.Rows), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.sharedBlksHit, prometheus.CounterValue, float64(stat.SharedBlksHit), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.sharedBlksRead, prometheus.CounterValue, float64(stat.SharedBlksRead), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.sharedBlksDirtied, prometheus.CounterValue, float64(stat.SharedBlksDirtied), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.sharedBlksWritten, prometheus.CounterValue, float64(stat.SharedBlksWritten), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.localBlksHit, prometheus.CounterValue, float64(stat.LocalBlksHit), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.localBlksRead, prometheus.CounterValue, float64(stat.LocalBlksRead), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.localBlksDirtied, prometheus.CounterValue, float64(stat.LocalBlksDirtied), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.localBlksWritten, prometheus.CounterValue, float64(stat.LocalBlksWritten), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.tempBlksRead, prometheus.CounterValue, float64(stat.TempBlksRead), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.tempBlksWritten, prometheus.CounterValue, float64(stat.TempBlksWritten), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.blkReadTimeSeconds, prometheus.CounterValue, float64(stat.BlkReadTimeSeconds), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
+		ch <- prometheus.MustNewConstMetric(c.blkWriteTimeSeconds, prometheus.CounterValue, float64(stat.BlkWriteTimeSeconds), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
 	}
 	return nil
 }

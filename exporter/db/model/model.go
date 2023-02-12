@@ -6,13 +6,15 @@ import (
 
 // PgLock contains information on locks held.
 type PgLock struct {
-	DatName string `db:"datname"`
-	Mode    string `db:"mode"`
-	Count   int    `db:"count"`
+	Database string `db:"database"`
+	DatName  string `db:"datname"`
+	Mode     string `db:"mode"`
+	Count    int    `db:"count"`
 }
 
 // PgStatActivity contains information on tx state.
 type PgStatActivity struct {
+	Database      string  `db:"database"`
 	DatName       string  `db:"datname"`
 	State         string  `db:"state"`
 	Count         int     `db:"count"`
@@ -21,7 +23,7 @@ type PgStatActivity struct {
 
 // PgStatUserTable contains information on user tables.
 type PgStatUserTable struct {
-	DatName          string             `db:"datname"`
+	Database         string             `db:"database"`
 	SchemaName       string             `db:"schemaname"`
 	RelName          string             `db:"relname"`
 	SeqScan          int                `db:"seq_scan"`
@@ -47,6 +49,7 @@ type PgStatUserTable struct {
 
 // PgStatioUserTable contains I/O information on user tables.
 type PgStatioUserTable struct {
+	Database      string `db:"database"`
 	SchemaName    string `db:"schemaname"`
 	RelName       string `db:"relname"`
 	HeapBlksRead  int    `db:"heap_blks_read"`
@@ -61,6 +64,7 @@ type PgStatioUserTable struct {
 
 // PgStatUserIndexes contains information on user indexes.
 type PgStatUserIndex struct {
+	Database      string `db:"database"`
 	SchemaName    string `db:"schemaname"`
 	RelName       string `db:"relname"`
 	IndexRelName  string `db:"indexrelname"`
@@ -71,6 +75,7 @@ type PgStatUserIndex struct {
 
 // PgStatioUserIndex contains I/O information on user indexes.
 type PgStatioUserIndex struct {
+	Database      string `db:"database"`
 	SchemaName    string `db:"schemaname"`
 	RelName       string `db:"relname"`
 	IndexRelName  string `db:"indexrelname"`
@@ -80,6 +85,7 @@ type PgStatioUserIndex struct {
 
 // PgStatStatement contains information on statements.
 type PgStatStatement struct {
+	Database            string  `db:"database"`
 	RolName             string  `db:"rolname"`
 	DatName             string  `db:"datname"`
 	QueryID             int     `db:"queryid"`

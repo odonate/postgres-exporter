@@ -8,6 +8,7 @@ import (
 
 const sqlSelectPgStatUserIndexes = `
 SELECT
+    current_database() as database,
     schemaname,
     relname,
     indexrelname,

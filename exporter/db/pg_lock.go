@@ -7,7 +7,11 @@ import (
 )
 
 const sqlSelectPgLock = `
-SELECT pg_database.datname,tmp.mode,COALESCE(count,0) as count
+SELECT 
+    current_database() as database,
+    pg_database.datname,
+    tmp.mode,
+    COALESCE(count,0) as count
 FROM
 (
   VALUES ('accesssharelock'),

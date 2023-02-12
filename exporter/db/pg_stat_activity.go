@@ -8,6 +8,7 @@ import (
 
 const sqlSelectPgStatActivity = `
 SELECT
+  current_database() as database,
   pg_database.datname,
   tmp.state,
   COALESCE(count,0) as count,

@@ -8,6 +8,7 @@ import (
 
 const sqlSelectPgStatStatements = `
 SELECT 
+    current_database() as database,
     t2.rolname, 
     t3.datname, 
     queryid,
