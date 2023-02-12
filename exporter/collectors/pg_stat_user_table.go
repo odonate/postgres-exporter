@@ -206,9 +206,7 @@ func (c *PgStatUserTableCollector) scrape(dbClient *db.Client, ch chan<- prometh
 	if err != nil {
 		return fmt.Errorf("user table stats: %w", err)
 	}
-	fmt.Println("locking locks")
 	c.mutex.Lock()
-	fmt.Println("acquired")
 	defer c.mutex.Unlock()
 	for _, stat := range userTableStats {
 		ch <- prometheus.MustNewConstMetric(c.seqScan, prometheus.CounterValue, float64(stat.SeqScan), stat.DatName, stat.SchemaName, stat.RelName)
@@ -231,6 +229,5 @@ func (c *PgStatUserTableCollector) scrape(dbClient *db.Client, ch chan<- prometh
 		ch <- prometheus.MustNewConstMetric(c.analyzeCount, prometheus.CounterValue, float64(stat.AnalyzeCount), stat.DatName, stat.SchemaName, stat.RelName)
 		ch <- prometheus.MustNewConstMetric(c.autoAnalyzeCount, prometheus.CounterValue, float64(stat.AutoAnalyzeCount), stat.DatName, stat.SchemaName, stat.RelName)
 	}
-	fmt.Println("unlocking locks")
 	return nil
 }
