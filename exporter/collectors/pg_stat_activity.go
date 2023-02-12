@@ -71,11 +71,14 @@ func (c *PgStatActivityCollector) scrape(dbClient *db.Client, ch chan<- promethe
 	if err != nil {
 		return fmt.Errorf("activity stats: %w", err)
 	}
+	fmt.Println("locking locks")
 	c.mutex.Lock()
+	fmt.Println("acquired")
 	defer c.mutex.Unlock()
 	for _, stat := range activityStats {
 		ch <- prometheus.MustNewConstMetric(c.activityCount, prometheus.GaugeValue, float64(stat.Count), stat.DatName, stat.State)
 		ch <- prometheus.MustNewConstMetric(c.maxTxDuration, prometheus.GaugeValue, stat.MaxTxDuration, stat.DatName, stat.State)
 	}
+	fmt.Println("unlocking locks")
 	return nil
 }

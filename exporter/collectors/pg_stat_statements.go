@@ -208,7 +208,9 @@ func (c *PgStatStatementsCollector) scrape(dbClient *db.Client, ch chan<- promet
 	if err != nil {
 		return fmt.Errorf("statement stats: %w", err)
 	}
+	fmt.Println("locking locks")
 	c.mutex.Lock()
+	fmt.Println("acquired")
 	defer c.mutex.Unlock()
 	for _, stat := range statementStats {
 		ch <- prometheus.MustNewConstMetric(c.calls, prometheus.CounterValue, float64(stat.Calls), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
@@ -231,5 +233,6 @@ func (c *PgStatStatementsCollector) scrape(dbClient *db.Client, ch chan<- promet
 		ch <- prometheus.MustNewConstMetric(c.blkReadTimeSeconds, prometheus.CounterValue, float64(stat.BlkReadTimeSeconds), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
 		ch <- prometheus.MustNewConstMetric(c.blkWriteTimeSeconds, prometheus.CounterValue, float64(stat.BlkWriteTimeSeconds), stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
 	}
+	fmt.Println("unlocking locks")
 	return nil
 }

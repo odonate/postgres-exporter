@@ -63,10 +63,13 @@ func (c *PgLocksCollector) scrape(dbClient *db.Client, ch chan<- prometheus.Metr
 	if err != nil {
 		return fmt.Errorf("lock stats: %w", err)
 	}
+	fmt.Println("locking locks")
 	c.mutex.Lock()
+	fmt.Println("lock acquired")
 	defer c.mutex.Unlock()
 	for _, stat := range locks {
 		ch <- prometheus.MustNewConstMetric(c.count, prometheus.GaugeValue, float64(stat.Count), stat.DatName, stat.Mode)
 	}
+	fmt.Println("unlocking locks")
 	return nil
 }
