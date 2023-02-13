@@ -28,7 +28,7 @@ We also offer support for multi-target scraping (see below).
 
 ### Single Target
 #### Go Binary
-```
+```golang
 import (
 	"github.com/odonate/postgres-exporter/exporter"
 	"github.com/odonate/postgres-exporter/exporter/db"
@@ -46,7 +46,7 @@ func main() {
   ...
 ```
 #### Kubernetes Deployment
-```
+```yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -79,7 +79,7 @@ spec:
 
 ### Multi-Target
 #### Go Binary
-```
+```golang
 import (
 	"github.com/odonate/postgres-exporter/exporter"
 	"github.com/odonate/postgres-exporter/exporter/db"
@@ -103,7 +103,7 @@ func main() {
   ...
 ```
 #### Kubernetes Deployment
-```
+```yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
