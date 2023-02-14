@@ -10,7 +10,6 @@ Instead, we leverage [pgx](https://github.com/jackc/pgx), which aims to be low-l
 
 We also offer support for multi-target scraping (see below).
 
-
 ## Options
 
 | Long Flag                 | ENV Flag                 | Default           | Description                                          |
@@ -23,6 +22,30 @@ We also offer support for multi-target scraping (see below).
 | --auth_mechanism          | $AUTH_MECHANISM          | password          | The mechanism to use when authenticating with the DB |
 | --application_name        | $APP_NAME                | postgres-exporter | The name of the application.                         |
 | --default_isolation_level | $DEFAULT_ISOLATION_LEVEL | REPEATABLE_READ   | The default isolation level for DB transactions      |
+
+## Features
+
+Default Collectors for the following tables:
+1. `pg_locks`
+2. `pg_stat_activity`
+3. `pg_stat_statements`
+4. `pg_stat_user_indexes`
+5. `pg_stat_user_tables`
+6. `pg_statio_user_indexes`
+7. `pg_statio_user_indexes`
+
+Custom Collectors can be added like so, provided they satisfy our Collector interface:
+```go
+type Collector interface {
+	prometheus.Collector
+	Scrape(ch chan<- prometheus.Metric) error
+}
+
+...
+
+exporter := exporter.MustNew(context.Background(), exporterOpts).
+		     WithCustomCollectors(collectors...)
+```
 
 ## Example Usage
 
