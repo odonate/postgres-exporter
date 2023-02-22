@@ -49,7 +49,9 @@ func (c *PgLocksCollector) Collect(ch chan<- prometheus.Metric) {
 // Scrape implements our Scraper interface.
 func (c *PgLocksCollector) Scrape(ch chan<- prometheus.Metric) error {
 	start := time.Now()
-	defer log.Infof("lock scrape took %dms", time.Now().Sub(start).Milliseconds())
+	defer func() {
+		log.Infof("lock scrape took %dms", time.Now().Sub(start).Milliseconds())
+	}()
 	group := errgroup.Group{}
 	for _, dbClient := range c.dbClients {
 		dbClient := dbClient

@@ -107,7 +107,9 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 // Collect implements the promtheus.Collector.
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	start := time.Now()
-	defer log.Infof("exporter collect took %dms", time.Now().Sub(start).Milliseconds())
+	defer func() {
+		log.Infof("exporter collect took %dms", time.Now().Sub(start).Milliseconds())
+	}()
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
 

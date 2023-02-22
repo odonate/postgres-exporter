@@ -194,7 +194,9 @@ func (c *PgStatStatementsCollector) Collect(ch chan<- prometheus.Metric) {
 // Scrape implements our Scraper interfacc.
 func (c *PgStatStatementsCollector) Scrape(ch chan<- prometheus.Metric) error {
 	start := time.Now()
-	defer log.Infof("statement scrape took %dms", time.Now().Sub(start).Milliseconds())
+	defer func() {
+		log.Infof("statement scrape took %dms", time.Now().Sub(start).Milliseconds())
+	}()
 	group := errgroup.Group{}
 	for _, dbClient := range c.dbClients {
 		dbClient := dbClient
