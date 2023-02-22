@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/odonate/postgres-exporter/exporter/collectors"
 	"github.com/odonate/postgres-exporter/exporter/db"
+	"github.com/odonate/postgres-exporter/exporter/logging"
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/sync/errgroup"
 )
+
+var log = logging.NewLogger()
 
 const namespace = "pg_stat"
 
@@ -102,6 +106,8 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect implements the promtheus.Collector.
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
+	start := time.Now()
+	defer log.Infof("exporter collect took %dms", time.Now().Sub(start).Milliseconds())
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/odonate/postgres-exporter/exporter/db"
 	"github.com/prometheus/client_golang/prometheus"
@@ -190,6 +191,8 @@ func (c *PgStatUserTableCollector) Collect(ch chan<- prometheus.Metric) {
 
 // Scrape implements our Scraper interfacc.
 func (c *PgStatUserTableCollector) Scrape(ch chan<- prometheus.Metric) error {
+	start := time.Now()
+	defer log.Infof("user table scrape took %dms", time.Now().Sub(start).Milliseconds())
 	group := errgroup.Group{}
 	for _, dbClient := range c.dbClients {
 		dbClient := dbClient

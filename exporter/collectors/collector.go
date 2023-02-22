@@ -2,8 +2,11 @@ package collectors
 
 import (
 	"github.com/odonate/postgres-exporter/exporter/db"
+	"github.com/odonate/postgres-exporter/exporter/logging"
 	"github.com/prometheus/client_golang/prometheus"
 )
+
+var log = logging.NewLogger()
 
 const (
 	namespace   = "pg_stat"

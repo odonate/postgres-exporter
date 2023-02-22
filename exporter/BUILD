@@ -7,6 +7,7 @@ go_library(
     deps = [
         "//exporter/db",
         "//exporter/collectors",
+        "//exporter/logging",
         "//third_party/go:prometheus-client",
         "//third_party/go:x_sync",
     ],

@@ -10,6 +10,7 @@ go_library(
     visibility = ["PUBLIC"],
     deps = [
         "//exporter/db",
+        "//exporter/logging",
         "//third_party/go:prometheus-client",
         "//third_party/go:x_sync",
     ],
