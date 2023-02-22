@@ -15,6 +15,7 @@ go_library(
     visibility = ["PUBLIC"],
     deps = [
         "//exporter/db/model",
+        "//exporter/logging",
         "//third_party/go:pgx.v4",
         "//third_party/go:scany",
     ],

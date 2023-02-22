@@ -7,7 +7,11 @@ import (
 	"github.com/georgysavva/scany/pgxscan"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
+
+	"github.com/odonate/postgres-exporter/exporter/logging"
 )
+
+var log = logging.NewLogger()
 
 const (
 	connectRetryWait = 2 * time.Second
@@ -15,6 +19,7 @@ const (
 
 // Client to PostgreSQL server.
 type Client struct {
+	opts      Opts
 	pool      *pgxpool.Pool
 	txOptions pgx.TxOptions
 }
@@ -41,7 +46,10 @@ func New(ctx context.Context, opts Opts) (*Client, error) {
 			}
 			continue
 		}
-		client := &Client{pool: pool}
+		client := &Client{
+			opts: opts,
+			pool: pool,
+		}
 		client.setTxOptions(opts)
 		return client, nil
 	}
