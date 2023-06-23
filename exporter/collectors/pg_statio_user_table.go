@@ -26,7 +26,7 @@ type PgStatIOUserTableCollector struct {
 	tidxBlksHit   *prometheus.Desc
 }
 
-// NewPgStatIOUserTableCollector instantiates and returns a new PgStatUserTableCollector.
+// NewPgStatIOUserTableCollector instantiates and returns a new PgStatIOUserTableCollector.
 func NewPgStatIOUserTableCollector(dbClients []*db.Client) *PgStatIOUserTableCollector {
 	variableLabels := []string{"database", "schemaname", "relname"}
 	return &PgStatIOUserTableCollector{
