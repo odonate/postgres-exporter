@@ -30,7 +30,8 @@ func DefaultCollectors(dbClients []*db.Client) []Collector {
 	return []Collector{
 		NewPgStatActivityCollector(dbClients),
 		NewPgLocksCollector(dbClients),
-		NewPgStatStatementsCollector(dbClients),
+		// Statement scrapes take way too long.
+		// NewPgStatStatementsCollector(dbClients),
 		NewPgStatUserTableCollector(dbClients),
 	}
 }
