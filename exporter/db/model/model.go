@@ -47,8 +47,8 @@ type PgStatUserTable struct {
 	AutoAnalyzeCount int                `db:"autoanalyze_count"`
 }
 
-// PgStatioUserTable contains I/O information on user tables.
-type PgStatioUserTable struct {
+// PgStatIOUserTable contains I/O information on user tables.
+type PgStatIOUserTable struct {
 	Database      string `db:"database"`
 	SchemaName    string `db:"schemaname"`
 	RelName       string `db:"relname"`
@@ -73,8 +73,8 @@ type PgStatUserIndex struct {
 	IndexTupFetch int    `db:"idx_tup_fetch"`
 }
 
-// PgStatioUserIndex contains I/O information on user indexes.
-type PgStatioUserIndex struct {
+// PgStatIOUserIndex contains I/O information on user indexes.
+type PgStatIOUserIndex struct {
 	Database      string `db:"database"`
 	SchemaName    string `db:"schemaname"`
 	RelName       string `db:"relname"`

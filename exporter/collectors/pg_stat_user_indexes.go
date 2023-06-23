@@ -16,12 +16,12 @@ type PgStatUserIndexesCollector struct {
 	dbClients []*db.Client
 	mutex     sync.RWMutex
 
-	idxScan          *prometheus.Desc
-	idxTupRead       *prometheus.Desc
-	idxTupFetch      *prometheus.Desc
+	idxScan     *prometheus.Desc
+	idxTupRead  *prometheus.Desc
+	idxTupFetch *prometheus.Desc
 }
 
-// NewPgStatUserIndexesCollector instantiates and returns a new PgStatUserTableCollector.
+// NewPgStatUserIndexesCollector instantiates and returns a new PgStatUserIndexesCollector.
 func NewPgStatUserIndexesCollector(dbClients []*db.Client) *PgStatUserIndexesCollector {
 	variableLabels := []string{"database", "schemaname", "relname", "indexrelname"}
 	return &PgStatUserIndexesCollector{
@@ -63,7 +63,7 @@ func (c *PgStatUserIndexesCollector) Collect(ch chan<- prometheus.Metric) {
 func (c *PgStatUserIndexesCollector) Scrape(ch chan<- prometheus.Metric) error {
 	start := time.Now()
 	defer func() {
-		log.Infof("user table scrape took %dms", time.Now().Sub(start).Milliseconds())
+		log.Infof("user indexes scrape took %dms", time.Now().Sub(start).Milliseconds())
 	}()
 	group := errgroup.Group{}
 	for _, dbClient := range c.dbClients {
@@ -76,11 +76,10 @@ func (c *PgStatUserIndexesCollector) Scrape(ch chan<- prometheus.Metric) error {
 	return nil
 }
 
-
 func (c *PgStatUserIndexesCollector) scrape(dbClient *db.Client, ch chan<- prometheus.Metric) error {
 	userIndexStats, err := dbClient.SelectPgStatUserIndexes(context.Background())
 	if err != nil {
-		return fmt.Errorf("user table stats: %w", err)
+		return fmt.Errorf("user indexes stats: %w", err)
 	}
 	for _, stat := range userIndexStats {
 		ch <- prometheus.MustNewConstMetric(c.idxScan, prometheus.CounterValue, float64(stat.IndexScan), stat.Database, stat.SchemaName, stat.RelName, stat.IndexRelName)

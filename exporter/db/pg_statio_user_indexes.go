@@ -6,7 +6,7 @@ import (
 	"github.com/odonate/postgres-exporter/exporter/db/model"
 )
 
-const sqlSelectPgStatioUserIndexes = `
+const sqlSelectPgStatIOUserIndexes = `
 SELECT
     current_database() as database,
     schemaname,
@@ -16,11 +16,11 @@ SELECT
     idx_blks_hit
 FROM pg_statio_user_indexes`
 
-// SelectPgStatioUserIndexes selects stats on user indexes.
-func (db *Client) SelectPgStatioUserIndexes(ctx context.Context) ([]*model.PgStatioUserIndex, error) {
-	pgStatioUserIndexes := []*model.PgStatioUserIndex{}
-	if err := db.Select(ctx, &pgStatioUserIndexes, sqlSelectPgStatioUserIndexes); err != nil {
+// SelectPgStatIOUserIndexes selects stats on user indexes.
+func (db *Client) SelectPgStatIOUserIndexes(ctx context.Context) ([]*model.PgStatIOUserIndex, error) {
+	pgStatIOUserIndexes := []*model.PgStatIOUserIndex{}
+	if err := db.Select(ctx, &pgStatIOUserIndexes, sqlSelectPgStatIOUserIndexes); err != nil {
 		return nil, err
 	}
-	return pgStatioUserIndexes, nil
+	return pgStatIOUserIndexes, nil
 }

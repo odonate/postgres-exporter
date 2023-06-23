@@ -12,10 +12,10 @@ const (
 	namespace   = "pg_stat"
 	namespaceIO = "pg_statio"
 
-	activitySubSystem   = "activity"
-	locksSubSystem      = "locks"
-	statementsSubSystem = "statements"
-	userTablesSubSystem = "user_tables"
+	activitySubSystem    = "activity"
+	locksSubSystem       = "locks"
+	statementsSubSystem  = "statements"
+	userTablesSubSystem  = "user_tables"
 	userIndexesSubSystem = "user_indexes"
 )
 

@@ -7,6 +7,8 @@ go_library(
         "pg_stat_statements.go",
         "pg_stat_user_table.go",
         "pg_stat_user_indexes.go",
+        "pg_statio_user_table.go",
+        # "pg_statio_user_indexes.go",
     ],
     visibility = ["PUBLIC"],
     deps = [
