@@ -186,8 +186,6 @@ func (c *PgStatStatementsCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect implements the promtheus.Collector.
 func (c *PgStatStatementsCollector) Collect(ch chan<- prometheus.Metric) {
-	c.mutex.Lock()
-	defer c.mutex.Unlock()
 	_ = c.Scrape(ch)
 }
 
@@ -214,9 +212,7 @@ func (c *PgStatStatementsCollector) scrape(dbClient *db.Client, ch chan<- promet
 		return fmt.Errorf("statement stats: %w", err)
 	}
 	start := time.Now()
-	c.mutex.Lock()
 	log.Infof("statements lock aquire %dms", time.Now().Sub(start).Milliseconds())
-	defer c.mutex.Unlock()
 	for _, stat := range statementStats {
 		ch <- prometheus.MustNewConstMetric(c.calls, prometheus.CounterValue, float64(stat.Calls), stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)
 		ch <- prometheus.MustNewConstMetric(c.totalTimeSeconds, prometheus.CounterValue, stat.TotalTimeSeconds, stat.Database, stat.RolName, stat.DatName, strconv.Itoa(stat.QueryID), stat.Query)

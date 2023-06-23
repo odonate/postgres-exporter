@@ -16,6 +16,7 @@ const (
 	locksSubSystem      = "locks"
 	statementsSubSystem = "statements"
 	userTablesSubSystem = "user_tables"
+	userIndexesSubSystem = "user_indexes"
 )
 
 // Collector wraps the prometheus.Collector.
@@ -33,5 +34,6 @@ func DefaultCollectors(dbClients []*db.Client) []Collector {
 		// Statement scrapes take way too long.
 		// NewPgStatStatementsCollector(dbClients),
 		NewPgStatUserTableCollector(dbClients),
+		NewPgStatUserIndexesCollector(dbClients),
 	}
 }

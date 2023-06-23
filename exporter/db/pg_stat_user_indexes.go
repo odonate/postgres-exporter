@@ -17,7 +17,7 @@ SELECT
     idx_tup_fetch
 FROM pg_stat_user_indexes`
 
-// SelectPgStatUserIndexes selects stats on user tables.
+// SelectPgStatUserIndexes selects stats on user indexes.
 func (db *Client) SelectPgStatUserIndexes(ctx context.Context) ([]*model.PgStatUserIndex, error) {
 	pgStatUserIndexes := []*model.PgStatUserIndex{}
 	if err := db.Select(ctx, &pgStatUserIndexes, sqlSelectPgStatUserIndexes); err != nil {

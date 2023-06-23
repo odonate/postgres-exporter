@@ -189,7 +189,7 @@ func (c *PgStatUserTableCollector) Collect(ch chan<- prometheus.Metric) {
 	_ = c.Scrape(ch)
 }
 
-// Scrape implements our Scraper interfacc.
+// Scrape implements our Scraper interface.
 func (c *PgStatUserTableCollector) Scrape(ch chan<- prometheus.Metric) error {
 	start := time.Now()
 	defer func() {
